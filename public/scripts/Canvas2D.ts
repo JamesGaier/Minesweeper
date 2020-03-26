@@ -11,6 +11,7 @@ export type ImageDetails = {
 };
 
 export default class Canvas2D {
+
     ctx: CanvasRenderingContext2D;
 
     constructor(id: string, font?: string) {
@@ -28,7 +29,9 @@ export default class Canvas2D {
 
     drawRect(x: number, y: number, w: number, h: number, c?: Color) {
         if (c) this.ctx.fillStyle = Color[c];
+
         this.ctx.rect(x, y, w, h);
+
     }
 
     fillRect(x: number, y: number, w: number, h: number, c?: Color) {
@@ -40,7 +43,9 @@ export default class Canvas2D {
         this.ctx.drawImage(img, x, y);
     }
 
+
     drawImageTransformed(img: CanvasImageSource, dest: ImageDetails, src?: ImageDetails) {
+
         const { x: dx, y: dy, w: dw, h: dh } = dest;
         if (src) {
             const { x: sx, y: sy, w: sw, h: sh } = src;
