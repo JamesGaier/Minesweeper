@@ -25,6 +25,7 @@
     "@tensorflow/tfjs": "^1.7.0"
   },
   "devDependencies": {
+    "prettier": "^2.0.2",
     "typescript": "^3.8.3"
   }
 }
