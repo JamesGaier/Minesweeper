@@ -14,7 +14,7 @@ export default class Canvas2D {
     constructor(id: string, font?: string) {
         this.ctx = document.getElementById(id).getContext("2d");
         if (font) {
-            this.ctx.font = "font";
+            this.ctx.font = font;
         }
     }
 
