@@ -68,15 +68,21 @@ export default class MineGrid {
         return x < this.#width && x >= 0 && y < this.#height && y >= 0;
     }
 
-    lost() { return this.#gameLost }
-    won() { return this.#gameWon }
-    done() { return this.won() || this.lost() }
+    lost() {
+        return this.#gameLost;
+    }
+    won() {
+        return this.#gameWon;
+    }
+    done() {
+        return this.won() || this.lost();
+    }
 
     tileAt(x: number, y: number) {
         // All positions outside the grid are unrevealed
         if (!this.validTilePos(x, y)) return -10;
         // All tiles become invalid if the game is lost
-        if(this.lost()) return -10;
+        if (this.lost()) return -10;
 
         // consult the revealing matrix
         if (!this.#revealed[x * this.#height + y]) return -1;
@@ -90,7 +96,7 @@ export default class MineGrid {
         if (this.tileAt(x, y) == -1) {
             this.#gameLost = true;
         }
-        return !this.lost()
+        return !this.lost();
     }
 
     draw(canvas: Canvas2D) {
@@ -134,7 +140,7 @@ export default class MineGrid {
 
     giveToHuman(canvas: Canvas2D) {
         canvas.onClickRelative((x, y) => {
-            if(!this.clickTile(x / this.tileSize, y / this.tileSize)){
+            if (!this.clickTile(x / this.tileSize, y / this.tileSize)) {
                 canvas.setFont("bold 50px monospace");
                 canvas.drawText("Hit a bomb", 100, 225, 300);
             }
