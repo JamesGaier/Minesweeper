@@ -122,7 +122,10 @@ export default class MineGrid {
 
     giveToHuman(canvas: Canvas2D) {
         canvas.onClickRelative((x, y) => {
-            console.log(x + ", " + y);
+            if(!this.clickTile(x / this.tileSize, y / this.tileSize)){
+                canvas.setFont("bold 50px monospace");
+                canvas.drawText("Hit a bomb", 100, 225, 300);
+            }
         });
     }
 }
