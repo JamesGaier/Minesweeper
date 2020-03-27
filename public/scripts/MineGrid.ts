@@ -121,8 +121,8 @@ export default class MineGrid {
     }
 
     giveToHuman(canvas: Canvas2D) {
-        canvas.onClick((event) => {
-            console.log(event.clientX + ", " + event.clientY);
+        canvas.onClickRelative((x, y) => {
+            console.log(x + ", " + y);
         });
     }
 }
