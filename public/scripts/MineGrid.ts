@@ -1,6 +1,10 @@
 import Canvas2D, { Color } from "./Canvas2D.js";
 
 export default class MineGrid {
+    readonly invalid_tile = -10;
+    readonly bomb_tile = -2;
+    readonly unrevealed = -1;
+
     tileSize: number;
     numBombs: number;
 
@@ -36,8 +40,7 @@ export default class MineGrid {
                 remainingBombs > 0 &&
                 Math.random() < remainingBombs / totalTiles
             )
-                // A bomb
-                this.#grid[i] = -1;
+                this.#grid[i] = this.bomb_tile;
             else this.#grid[i] = 0; // A blank
 
             this.#revealed[i] = false;
@@ -51,7 +54,10 @@ export default class MineGrid {
                     const yn = y + j;
                     if (xn == x && yn == y) continue;
                     if (xn >= 0 && xn < rows && yn >= 0 && yn < cols) {
-                        if (this.#grid[xn * this.#height + yn] == -1) count++;
+                        if (
+                            this.#grid[xn * this.#height + yn] == this.bomb_tile
+                        )
+                            count++;
                     }
                 }
 
@@ -80,20 +86,20 @@ export default class MineGrid {
 
     tileAt(x: number, y: number) {
         // All positions outside the grid are unrevealed
-        if (!this.validTilePos(x, y)) return -10;
+        if (!this.validTilePos(x, y)) return this.invalid_tile;
         // All tiles become invalid if the game is lost
-        if (this.lost()) return -10;
+        if (this.lost()) return this.invalid_tile;
 
         // consult the revealing matrix
-        if (!this.#revealed[x * this.#height + y]) return -1;
-        else return this.#grid[x * this.#height + y]; // -1 here is a mine
+        if (!this.#revealed[x * this.#height + y]) return this.unrevealed;
+        else return this.#grid[x * this.#height + y];
     }
 
     clickTile(x: number, y: number) {
         if (!this.validTilePos(x, y)) return true;
 
         this.#revealed[x * this.#height + y] = true;
-        if (this.tileAt(x, y) == -1) {
+        if (this.tileAt(x, y) == this.bomb_tile) {
             this.#gameLost = true;
         }
         return !this.lost();
@@ -102,45 +108,53 @@ export default class MineGrid {
     draw(canvas: Canvas2D) {
         const { width, height } = canvas.node.getBoundingClientRect();
 
-        for (let x = 0; x < width; x += this.tileSize)
-            for (let y = 0; y < height; y += this.tileSize) {
-                const tile = this.tileAt(x / this.tileSize, y / this.tileSize);
-                switch (tile) {
-                    case -1:
-                        canvas.drawRect(
-                            x,
-                            y,
-                            this.tileSize,
-                            this.tileSize,
-                            Color.gray
-                        );
-                        break;
-                    case 0:
-                        canvas.fillRect(
-                            x,
-                            y,
-                            this.tileSize,
-                            this.tileSize,
-                            Color.gray
-                        );
-                        break;
-                    default:
-                        canvas.fillRect(
-                            x,
-                            y,
-                            this.tileSize,
-                            this.tileSize,
-                            Color.gray
-                        );
-                        canvas.drawText(`${tile}`, x, y, this.tileSize);
-                        break;
-                }
+        for (let tileX = 0; tileX < this.#width; tileX++)
+            for (let tileY = 0; tileY < this.#height; tileY++) {
+                const x = tileX * this.tileSize;
+                const y = tileY * this.tileSize;
+                if (x >= width || y >= height) break;
+                const tile = this.tileAt(tileX, tileY);
+                if (tile != -10)
+                    switch (tile) {
+                        case this.unrevealed:
+                            canvas.drawRect(
+                                x,
+                                y,
+                                this.tileSize,
+                                this.tileSize,
+                                Color.gray
+                            );
+                            break;
+                        case 0:
+                            canvas.fillRect(
+                                x,
+                                y,
+                                this.tileSize,
+                                this.tileSize,
+                                Color.gray
+                            );
+                            break;
+                        case this.invalid_tile:
+                            break;
+                        default:
+                            canvas.fillRect(
+                                x,
+                                y,
+                                this.tileSize,
+                                this.tileSize,
+                                Color.gray
+                            );
+                            canvas.drawText(`${tile}`, x, y, this.tileSize);
+                            break;
+                    }
             }
     }
 
     giveToHuman(canvas: Canvas2D) {
         canvas.onClickRelative((x, y) => {
-            if (!this.clickTile(x / this.tileSize, y / this.tileSize)) {
+            const tileX = Math.floor(x / this.tileSize);
+            const tileY = Math.floor(y / this.tileSize);
+            if (!this.clickTile(tileX, tileY)) {
                 canvas.setFont("bold 50px monospace");
                 canvas.drawText("Hit a bomb", 100, 225, 300);
             }
