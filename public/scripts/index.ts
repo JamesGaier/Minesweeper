@@ -4,8 +4,6 @@ import MineGrid from "./MineGrid.js";
 const gridCanvas = new Canvas("canvas", "sans-serif");
 const mineGrid = new MineGrid(25, 25, 10, 100);
 
-
 mineGrid.giveToHuman(gridCanvas);
 
-
- mineGrid.draw(gridCanvas);
+mineGrid.draw(gridCanvas);
