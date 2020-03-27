@@ -1,6 +1,7 @@
 export enum Color {
     black,
     white,
+    gray,
 }
 
 export type ImageDetails = {
@@ -29,9 +30,8 @@ export default class Canvas2D {
     }
 
     drawRect(x: number, y: number, w: number, h: number, c?: Color) {
-        if (c) this.ctx.fillStyle = Color[c];
-
-        this.ctx.rect(x, y, w, h);
+        if (c) this.ctx.strokeStyle = Color[c];
+        this.ctx.strokeRect(x, y, w, h);
     }
 
     fillRect(x: number, y: number, w: number, h: number, c?: Color) {
