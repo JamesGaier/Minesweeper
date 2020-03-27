@@ -5,6 +5,8 @@ export default class MineGrid {
     numBombs: number;
     #grid: Array<Array<number>>;
     #revealed: Array<Array<boolean>>;
+    #gameLost: boolean;
+    #gameWon: boolean;
 
     constructor(
         rows: number,
@@ -14,6 +16,8 @@ export default class MineGrid {
     ) {
         this.tileSize = tileSize;
         this.numBombs = numBombs;
+        this.#gameLost = false;
+        this.#gameWon = false;
 
         const totalTiles = rows * cols;
         let remainingBombs = numBombs;
@@ -65,20 +69,29 @@ export default class MineGrid {
         );
     }
 
+    lost() { return this.#gameLost }
+    won() { return this.#gameWon }
+    done() { return this.won() || this.lost() }
+
     tileAt(x: number, y: number) {
         // All positions outside the grid are unrevealed
-        if (!this.validTilePos(x, y)) return -1;
+        if (!this.validTilePos(x, y)) return -10;
+        // All tiles become invalid if the game is lost
+        if(this.lost()) return -10;
 
         // consult the revealing matrix
         if (!this.#revealed[x][y]) return -1;
-        else return this.#grid[x][y];
+        else return this.#grid[x][y]; // -1 here is a mine
     }
 
     clickTile(x: number, y: number) {
         if (!this.validTilePos(x, y)) return true;
 
         this.#revealed[x][y] = true;
-        return this.tileAt(x, y) != -1;
+        if(this.tileAt(x, y) == -1){
+            this.#gameLost = true;
+        }
+        return !this.lost()
     }
 
     draw(canvas: Canvas2D) {
