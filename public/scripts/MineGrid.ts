@@ -81,7 +81,11 @@ export default class MineGrid {
         return this.tileAt(x, y) != -1;
     }
 
-    draw(canvas: Canvas2D) {
-        console.log("Drawing");
+    draw(canvas: Canvas2D) {}
+
+    giveToHuman(canvas: Canvas2D) {
+        canvas.onClick((event) => {
+            console.log(event.clientX + ", " + event.clientY);
+        });
     }
 }
