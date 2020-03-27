@@ -12,11 +12,13 @@ export type ImageDetails = {
 
 export default class Canvas2D {
     ctx: CanvasRenderingContext2D;
+    node: HTMLCanvasElement;
 
     constructor(id: string, font?: string) {
         const canvas = document.getElementById(id);
         if (canvas instanceof HTMLCanvasElement) {
-            const context = canvas.getContext("2d");
+            this.node = canvas;
+            const context = this.node.getContext("2d");
             if (context) this.ctx = context;
             else throw new Error("Could not get canvas for " + id);
         } else throw new Error(id + " is not a valid canvas");
@@ -61,5 +63,9 @@ export default class Canvas2D {
 
     drawText(text: string, x: number, y: number, maxwidth?: number) {
         this.ctx.fillText(text, x, y, maxwidth);
+    }
+
+    onClick(callback: (e: MouseEvent) => void) {
+        this.node.addEventListener("click", callback);
     }
 }
