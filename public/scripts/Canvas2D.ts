@@ -68,4 +68,12 @@ export default class Canvas2D {
     onClick(callback: (e: MouseEvent) => void) {
         this.node.addEventListener("click", callback);
     }
+
+    onClickRelative(callback: (x: number, y: number) => void) {
+        this.onClick((e) => {
+            const x = e.pageX - this.node.offsetLeft;
+            const y = e.pageY - this.node.offsetTop;
+            callback(x, y);
+        });
+    }
 }
