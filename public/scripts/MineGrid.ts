@@ -1,4 +1,4 @@
-import Canvas2D from "./Canvas2D.js";
+import Canvas2D, { Color } from "./Canvas2D.js";
 
 export default class MineGrid {
     tileSize: number;
@@ -81,7 +81,44 @@ export default class MineGrid {
         return this.tileAt(x, y) != -1;
     }
 
-    draw(canvas: Canvas2D) {}
+    draw(canvas: Canvas2D) {
+        const { width, height } = canvas.node.getBoundingClientRect();
+
+        for (let x = 0; x < width; x += this.tileSize)
+            for (let y = 0; y < height; y += this.tileSize) {
+                const tile = this.tileAt(x / this.tileSize, y / this.tileSize);
+                switch (tile) {
+                    case -1:
+                        canvas.drawRect(
+                            x,
+                            y,
+                            this.tileSize,
+                            this.tileSize,
+                            Color.gray
+                        );
+                        break;
+                    case 0:
+                        canvas.fillRect(
+                            x,
+                            y,
+                            this.tileSize,
+                            this.tileSize,
+                            Color.gray
+                        );
+                        break;
+                    default:
+                        canvas.fillRect(
+                            x,
+                            y,
+                            this.tileSize,
+                            this.tileSize,
+                            Color.gray
+                        );
+                        canvas.drawText(`${tile}`, x, y, this.tileSize);
+                        break;
+                }
+            }
+    }
 
     giveToHuman(canvas: Canvas2D) {
         canvas.onClick((event) => {
