@@ -6,7 +6,8 @@
   "scripts": {
     "build": "npx tsc",
     "lint": "npx eslint public/scripts/*",
-    "fix": "npx eslint public/scripts/* --fix"
+    "fix": "npx eslint public/scripts/* --fix",
+    "prestart": "npm run build"
   },
   "repository": {
     "type": "git",

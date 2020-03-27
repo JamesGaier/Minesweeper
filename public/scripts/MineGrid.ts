@@ -1,4 +1,4 @@
-import Canvas2D from "./Canvas2D";
+import Canvas2D from "./Canvas2D.js";
 
 export default class MineGrid {
     tileSize: number;
