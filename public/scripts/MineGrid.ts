@@ -157,7 +157,7 @@ export default class MineGrid {
             if (!this.clickTile(tileX, tileY)) {
                 canvas.setFont("bold 50px monospace");
                 canvas.drawText("Hit a bomb", 100, 225, 300);
-            }
+            } else this.draw(canvas);
         });
     }
 }
