@@ -224,10 +224,17 @@ export default class MineGrid {
         canvas.onClickRelative((x, y) => {
             const tileX = Math.floor(x / this.tileSize);
             const tileY = Math.floor(y / this.tileSize);
-            if (!this.clickTile(tileX, tileY)) {
+            if (!this.done()) this.clickTile(tileX, tileY);
+            else return;
+
+            canvas.ctx.clearRect(0, 0, canvas.node.width, canvas.node.height);
+            this.draw(canvas);
+
+            if (this.lost()) {
                 canvas.setFont("bold 50px monospace");
-                canvas.drawText("Hit a bomb", 100, 225, 300);
-            } else this.draw(canvas);
+                canvas.drawText("Hit a bomb", 100, 225, Color.red);
+                console.log("Game lost");
+            }
         });
     }
 }
