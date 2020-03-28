@@ -159,12 +159,19 @@ export default class MineGrid {
                 if (tile != -10)
                     switch (tile) {
                         case this.unrevealed:
-                            canvas.drawRect(
+                            canvas.fillRect(
                                 x,
                                 y,
                                 this.tileSize,
                                 this.tileSize,
                                 Color.gray
+                            );
+                            canvas.drawRect(
+                                x,
+                                y,
+                                this.tileSize,
+                                this.tileSize,
+                                Color.black
                             );
                             break;
                         case 0:
@@ -173,7 +180,23 @@ export default class MineGrid {
                                 y,
                                 this.tileSize,
                                 this.tileSize,
-                                Color.gray
+                                Color.white
+                            );
+                            canvas.drawRect(
+                                x,
+                                y,
+                                this.tileSize,
+                                this.tileSize,
+                                Color.black
+                            );
+                            break;
+                        case this.bomb_tile:
+                            canvas.fillRect(
+                                x,
+                                y,
+                                this.tileSize,
+                                this.tileSize,
+                                Color.black
                             );
                             break;
                         case this.invalid_tile:
@@ -188,10 +211,9 @@ export default class MineGrid {
                             );
                             canvas.drawText(
                                 `${tile}`,
-                                x + this.tileSize,
-                                y,
-                                Color.white,
-                                this.tileSize * 2
+                                x,
+                                y + this.tileSize,
+                                Color.green
                             );
                             break;
                     }
