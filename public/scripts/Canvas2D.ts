@@ -61,7 +61,8 @@ export default class Canvas2D {
         this.ctx.font = font;
     }
 
-    drawText(text: string, x: number, y: number, maxwidth?: number) {
+    drawText(text: string, x: number, y: number, c?: Color, maxwidth?: number) {
+        if (c) this.ctx.fillStyle = Color[c];
         this.ctx.fillText(text, x, y, maxwidth);
     }
 

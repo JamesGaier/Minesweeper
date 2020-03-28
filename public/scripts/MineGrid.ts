@@ -144,7 +144,13 @@ export default class MineGrid {
                                 this.tileSize,
                                 Color.gray
                             );
-                            canvas.drawText(`${tile}`, x, y, this.tileSize);
+                            canvas.drawText(
+                                `${tile}`,
+                                x + this.tileSize,
+                                y,
+                                Color.white,
+                                this.tileSize * 2
+                            );
                             break;
                     }
             }
