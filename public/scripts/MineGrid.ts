@@ -49,23 +49,23 @@ export default class MineGrid {
         const countNeighborBombs = (x: number, y: number) => {
             let count = 0;
             for (let i = -1; i <= 1; i++)
-                for (let j = 0; j <= 1; j++) {
+                for (let j = -1; j <= 1; j++) {
                     const xn = x + i;
                     const yn = y + j;
                     if (xn == x && yn == y) continue;
-                    if (xn >= 0 && xn < rows && yn >= 0 && yn < cols) {
-                        if (
-                            this.#grid[xn * this.#height + yn] == this.bomb_tile
-                        )
-                            count++;
-                    }
+                    if (
+                        this.validTilePos(xn, yn) &&
+                        this.#grid[xn * this.#height + yn] == this.bomb_tile
+                    )
+                        count++;
                 }
 
             return count;
         };
         for (let i = 0; i < this.#width; i++) {
             for (let j = 0; j < this.#height; j++) {
-                this.#grid[i * this.#height + j] = countNeighborBombs(i, j);
+                if (this.#grid[i * this.#height + j] == 0)
+                    this.#grid[i * this.#height + j] = countNeighborBombs(i, j);
             }
         }
     }
