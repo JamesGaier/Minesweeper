@@ -2,7 +2,8 @@ export enum Color {
     black,
     white,
     gray,
-    green
+    green,
+    red,
 }
 
 export type ImageDetails = {
