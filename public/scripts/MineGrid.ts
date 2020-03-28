@@ -128,7 +128,8 @@ export default class MineGrid {
                             if (
                                 this.validTilePos(tX, tY) &&
                                 !inQueue &&
-                                !inProcessed
+                                !inProcessed &&
+                                !this.#revealed[tX * this.#height + tY]
                             )
                                 queue.push({ x: tX, y: tY });
                         }
