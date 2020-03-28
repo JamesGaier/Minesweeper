@@ -99,6 +99,47 @@ export default class MineGrid {
         if (!this.validTilePos(x, y)) return true;
 
         this.#revealed[x * this.#height + y] = true;
+
+        const floodClick = (startX: number, startY: number) => {
+            type TilePos = { x: number; y: number };
+            let queue: Array<TilePos> = [];
+            let processed: Array<TilePos> = [];
+            queue.push({ x: startX, y: startY });
+
+            let tile = queue.shift();
+            while (tile !== undefined) {
+                const { x, y } = tile;
+                console.log(`Clicked on ${x}, ${y}`);
+                this.#revealed[x * this.#height + y] = true;
+                processed.push(tile);
+
+                // Check neighbors if we are blank
+                if (this.#grid[x * this.#height + y] == 0)
+                    for (let i = -1; i <= 1; i++)
+                        for (let j = -1; j <= 1; j++) {
+                            const tX = x + i;
+                            const tY = y + j;
+                            const inQueue = queue.some(
+                                (t) => t.x === tX && t.y === tY
+                            );
+                            const inProcessed = processed.some(
+                                (t) => t.x === tX && t.y === tY
+                            );
+                            if (
+                                this.validTilePos(tX, tY) &&
+                                !inQueue &&
+                                !inProcessed
+                            )
+                                queue.push({ x: tX, y: tY });
+                        }
+
+                tile = queue.shift();
+            }
+        };
+
+        // blank tiles cause a "flood fill" algorithm to be used
+        if (this.#grid[x * this.#height + y] == 0) floodClick(x, y);
+
         if (this.tileAt(x, y) == this.bomb_tile) {
             this.#gameLost = true;
         }
