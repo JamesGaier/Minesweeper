@@ -143,8 +143,14 @@ export default class MineGrid {
 
         if (this.tileAt(x, y) == this.bomb_tile) {
             this.#gameLost = true;
+        } else if (this.unrevealedTileCount() == this.numBombs) {
+            this.#gameWon = true;
         }
         return !this.lost();
+    }
+
+    unrevealedTileCount() {
+        return this.#revealed.filter((x) => x == false).length;
     }
 
     draw(canvas: Canvas2D) {
@@ -234,6 +240,10 @@ export default class MineGrid {
                 canvas.setFont("bold 50px monospace");
                 canvas.drawText("Hit a bomb", 100, 225, Color.red);
                 console.log("Game lost");
+            } else if (this.won()) {
+                canvas.setFont("bold 50px monospace");
+                canvas.drawText("You won", 100, 225, Color.red);
+                console.log("Game won");
             }
         });
     }
