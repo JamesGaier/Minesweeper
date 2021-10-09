@@ -1,6 +1,9 @@
 export enum Color {
     black,
     white,
+    gray,
+    green,
+    red,
 }
 
 export type ImageDetails = {
@@ -29,9 +32,8 @@ export default class Canvas2D {
     }
 
     drawRect(x: number, y: number, w: number, h: number, c?: Color) {
-        if (c) this.ctx.fillStyle = Color[c];
-
-        this.ctx.rect(x, y, w, h);
+        if (c) this.ctx.strokeStyle = Color[c];
+        this.ctx.strokeRect(x, y, w, h);
     }
 
     fillRect(x: number, y: number, w: number, h: number, c?: Color) {
@@ -61,11 +63,20 @@ export default class Canvas2D {
         this.ctx.font = font;
     }
 
-    drawText(text: string, x: number, y: number, maxwidth?: number) {
+    drawText(text: string, x: number, y: number, c?: Color, maxwidth?: number) {
+        if (c) this.ctx.fillStyle = Color[c];
         this.ctx.fillText(text, x, y, maxwidth);
     }
 
     onClick(callback: (e: MouseEvent) => void) {
         this.node.addEventListener("click", callback);
+    }
+
+    onClickRelative(callback: (x: number, y: number) => void) {
+        this.onClick((e) => {
+            const x = e.pageX - this.node.offsetLeft;
+            const y = e.pageY - this.node.offsetTop;
+            callback(x, y);
+        });
     }
 }
